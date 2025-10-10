@@ -97,4 +97,30 @@ class FornecedoresController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function consultaCnpj($cnpj = null)
+{
+    $this->request->allowMethod(['get', 'ajax']);
+
+    if (!$cnpj) {
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode(['error' => 'CNPJ não informado']));
+    }
+
+    $http = new \Cake\Http\Client();
+    $cnpj = preg_replace('/\D/', '', $cnpj); // limpa pontos/traços
+
+    $response = $http->get("https://brasilapi.com.br/api/cnpj/v1/{$cnpj}");
+
+    if ($response->isOk()) {
+        $dados = $response->getJson();
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($dados));
+    } else {
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode(['error' => 'Erro ao consultar API']));
+    }
+}
+
 }

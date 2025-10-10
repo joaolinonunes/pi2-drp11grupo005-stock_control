@@ -1,9 +1,3 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Fornecedore $fornecedore
- */
-?>
 <div class="row">
     <aside class="column">
         <div class="side-nav">
@@ -17,10 +11,13 @@
             <fieldset>
                 <legend><?= __('Add Fornecedore') ?></legend>
                 <?php
-                    echo $this->Form->control('nome');
-                    echo $this->Form->control('cnpj');
-                    echo $this->Form->control('contato');
-                    echo $this->Form->control('categoria');
+                    echo $this->Form->control('cnpj', [
+                        'id' => 'cnpj',
+                        'label' => 'CNPJ'
+                    ]);
+                    echo $this->Form->control('nome', ['id' => 'nome']);
+                    echo $this->Form->control('contato', ['id' => 'contato']);
+                    echo $this->Form->control('categoria', ['id' => 'categoria']);
                     echo $this->Form->control('data_cadastro', ['empty' => true]);
                 ?>
             </fieldset>
@@ -29,3 +26,4 @@
         </div>
     </div>
 </div>
+  

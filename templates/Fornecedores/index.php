@@ -99,67 +99,133 @@
     </div>
 </div>
 
-    <!-- Modal de adicionar fornecedor -->
-<div class="modal modal-blur fade" id="add-supplier-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <!-- Formulário de adição de fornecedor -->
-            <form action="<?= $this->Url->build(['controller' => 'Fornecedores', 'action' => 'add']) ?>" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title">Adicionar Novo Fornecedor</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Nome</label>
-                                <input type="text" class="form-control" name="nome" placeholder="Nome do fornecedor">
+<!-- Modal de adicionar fornecedor -->
+    <div class="modal modal-blur fade" id="add-supplier-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <!-- Formulário de adição de fornecedor -->
+                <form action="<?= $this->Url->build(['controller' => 'Fornecedores', 'action' => 'add']) ?>" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Adicionar Novo Fornecedor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nome</label>
+                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do fornecedor">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">CNPJ</label>
+                                    <input type="text" class="form-control" name="cnpj" id="cnpj" placeholder="CNPJ">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">CNPJ</label>
-                                <input type="text" class="form-control" name="cnpj" placeholder="CNPJ">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">cep</label>
+                                    <input type="text" class="form-control" name="nome" id="cep" placeholder="Nome do fornecedor">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Logradouro</label>
+                                    <input type="text" class="form-control" name="cnpj" id="logradouro" placeholder="CNPJ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Contato</label>
+                                    <input type="text" class="form-control" name="contato" id="contato" placeholder="(00) 00000-0000">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Categoria</label>
+                                    <select class="form-select" name="categoria">
+                                        <option value="Carnes">Carnes</option>
+                                        <option value="Massas">Massas</option>
+                                        <option value="Bebidas">Bebidas</option>
+                                        <option value="Temperos">Temperos</option>
+                                        <option value="Cereais">Cereais</option>
+                                        <option value="Verduras e Legumes">Verduras e Legumes</option>
+                                        <option value="Frutas">Frutas</option>
+                                        <option value="Outros">Outros</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Contato</label>
-                                <input type="text" class="form-control" name="contato" placeholder="(00) 00000-0000">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Categoria</label>
-                                <select class="form-select" name="categoria">
-                                    <option value="Carnes">Carnes</option>
-                                    <option value="Massas">Massas</option>
-                                    <option value="Bebidas">Bebidas</option>
-                                    <option value="Temperos">Temperos</option>
-                                    <option value="Cereais">Cereais</option>
-                                    <option value="Verduras e Legumes">Verduras e Legumes</option>
-                                    <option value="Frutas">Frutas</option>
-                                    <option value="Outros">Outros</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-ghost-danger" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary ms-auto">
+                            <!-- Plus Icon -->
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            Adicionar Fornecedor
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost-danger" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary ms-auto">
-                        <!-- Plus Icon -->
-                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        Adicionar Fornecedor
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- Tabler Core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.1.1/dist/js/tabler.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $("#cnpj").on("blur", function () {
+            let cnpj = $(this).val().replace(/\D/g, ''); // só números
+            console.log("CNPJ digitado:", cnpj);
+
+            if (cnpj.length === 14) {
+                $.ajax({
+                    url: "/fornecedores/consulta-cnpj/" + cnpj,
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log("Resposta da API:", data);
+
+                        if (data.razao_social) {
+                            $("#nome").val(data.razao_social); // joga razão social no campo Nome
+                            // se quiser adicionar outros, só criar inputs e preencher aqui
+                        } else {
+                            alert("CNPJ não encontrado!");
+                        }
+                        if (data.razao_social) {
+                            $("#contato").val(data.ddd_telefone_1); // joga razão social no campo Nome
+                            // se quiser adicionar outros, só criar inputs e preencher aqui
+                        } else {
+                            alert("CNPJ não encontrado!");
+                        }
+                        if (data.razao_social) {
+                            $("#cep").val(data.cep); // joga razão social no campo Nome
+                            // se quiser adicionar outros, só criar inputs e preencher aqui
+                        } else {
+                            alert("CNPJ não encontrado!");
+                        }
+                        if (data.razao_social) {
+                            $("#logradouro").val(data.logradouro); // joga razão social no campo Nome
+                            // se quiser adicionar outros, só criar inputs e preencher aqui
+                        } else {
+                            alert("CNPJ não encontrado!");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erro na requisição:", error);
+                        alert("Erro ao consultar o CNPJ.");
+                    }
+                });
+            }
+        });
+    });
+    </script>
