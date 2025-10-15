@@ -282,10 +282,10 @@ return [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
-            //'host' => '127.0.0.1',
-                //'username' => 'root@localhost',
-                //'password' => '',
-                //'database' => 'pi',
+            'host' => '127.0.0.1',
+                'username' => 'root',
+                'password' => '',
+                'database' => 'pi',
             'timezone' => 'UTC',
 
             /*
