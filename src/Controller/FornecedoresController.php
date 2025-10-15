@@ -42,19 +42,35 @@ class FornecedoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
-        $fornecedore = $this->Fornecedores->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $fornecedore = $this->Fornecedores->patchEntity($fornecedore, $this->request->getData());
-            if ($this->Fornecedores->save($fornecedore)) {
-                $this->Flash->success(__('The fornecedore has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The fornecedore could not be saved. Please, try again.'));
+{
+    // Força resposta JSON para debug
+    $this->viewBuilder()->setClassName('Json');
+    
+    $fornecedore = $this->Fornecedores->newEmptyEntity();
+    if ($this->request->is('post')) {
+        $fornecedore = $this->Fornecedores->patchEntity($fornecedore, $this->request->getData());
+        
+        if ($this->Fornecedores->save($fornecedore)) {
+            $this->set([
+                'success' => true,
+                'message' => 'Fornecedor cadastrado com sucesso!',
+                'data' => $fornecedore
+            ]);
+            $this->viewBuilder()->setOption('serialize', ['success', 'message', 'data']);
+            return;
         }
-        $this->set(compact('fornecedore'));
+        
+        // Erro ao salvar
+        $this->response = $this->response->withStatus(400);
+        $this->set([
+            'success' => false,
+            'message' => 'Erro ao salvar fornecedor',
+            'errors' => $fornecedore->getErrors()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['success', 'message', 'errors']);
+        return;
     }
+}
 
     /**
      * Edit method
@@ -96,5 +112,30 @@ class FornecedoresController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    
+    public function consultaCnpj($cnpj = null)
+    {
+        $this->request->allowMethod(['get', 'ajax']);
+
+        if (!$cnpj) {
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode(['error' => 'CNPJ não informado']));
+        }
+
+        $http = new \Cake\Http\Client();
+        $cnpj = preg_replace('/\D/', '', $cnpj); // limpa pontos/traços
+
+        $response = $http->get("https://brasilapi.com.br/api/cnpj/v1/{$cnpj}");
+
+        if ($response->isOk()) {
+            $dados = $response->getJson();
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode($dados));
+        } else {
+            return $this->response->withType('application/json')
+                ->withStringBody(json_encode(['error' => 'Erro ao consultar API']));
+        }
     }
 }

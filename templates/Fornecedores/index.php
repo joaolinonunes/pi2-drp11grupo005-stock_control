@@ -140,22 +140,35 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Nome</label>
-                                    <input type="text" class="form-control" name="nome" placeholder="Nome do fornecedor">
+                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do fornecedor">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">CNPJ</label>
-                                    <input type="text" class="form-control" name="cnpj" placeholder="CNPJ">
+                                    <input type="text" class="form-control" name="cnpj" id="cnpj" placeholder="CNPJ">
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">cep</label>
+                                    <input type="text" class="form-control" name="cep" id="cep" placeholder="Nome do fornecedor">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Logradouro</label>
+                                    <input type="text" class="form-control" name="logradouro" id="logradouro" placeholder="CNPJ">
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label class="form-label">Contato</label>
-                                    <input type="text" class="form-control" name="contato" placeholder="(00) 00000-0000">
+                                    <input type="text" class="form-control" name="contato" id="contato" placeholder="(00) 00000-0000">
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -192,6 +205,192 @@
 
     <!-- Tabler Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.1.1/dist/js/tabler.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Função para formatar CNPJ
+            function formatCNPJ(value) {
+                return value
+                    .replace(/\D/g, '')
+                    .replace(/^(\d{2})(\d)/, '$1.$2')
+                    .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                    .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                    .replace(/(\d{4})(\d)/, '$1-$2')
+                    .slice(0, 18);
+            }
+        
+            // Aplicar máscara ao digitar
+            $("#cnpj").on("input", function () {
+                $(this).val(formatCNPJ($(this).val()));
+            });
+        
+            // Consultar API ao sair do campo
+            $("#cnpj").on("blur", function () {
+                let cnpj = $(this).val().replace(/\D/g, '');
+                console.log("=== DEBUG CNPJ ===");
+                console.log("CNPJ digitado:", cnpj);
+            
+                if (cnpj.length === 14) {
+                    // Mostra loading
+                    $("#nome").val("Consultando...");
+
+                    // Monta a URL
+                    let url = "<?= $this->Url->build(['controller' => 'Fornecedores', 'action' => 'consulta_cnpj', '_placeholder_']) ?>".replace('_placeholder_', cnpj);
+                    console.log("URL que será chamada:", url);
+
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log("✅ Sucesso! Resposta da API:", data);
+                        
+                            if (data.error) {
+                                alert("Erro: " + data.error);
+                                $("#nome").val("");
+                                return;
+                            }
+                        
+                            if (data.razao_social) {
+                                // Preenche os campos com os dados retornados
+                                $("#nome").val(data.razao_social || "");
+
+                                // Formata telefone (se existir)
+                                let telefone = data.ddd_telefone_1 || "";
+                                if (telefone) {
+                                    telefone = telefone.replace(/\D/g, '');
+                                    if (telefone.length === 10) {
+                                        telefone = telefone.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+                                    } else if (telefone.length === 11) {
+                                        telefone = telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+                                    }
+                                }
+                                $("#contato").val(telefone);
+
+                                // Formata CEP
+                                let cep = (data.cep || "").replace(/\D/g, '');
+                                if (cep.length === 8) {
+                                    cep = cep.replace(/^(\d{5})(\d{3})$/, "$1-$2");
+                                }
+                                $("#cep").val(cep);
+
+                                $("#logradouro").val(data.logradouro || "");
+
+                                console.log("✅ Campos preenchidos com sucesso!");
+                            } else {
+                                alert("CNPJ não encontrado na base de dados!");
+                                $("#nome").val("");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("❌ ERRO na requisição AJAX");
+                            console.error("Status HTTP:", xhr.status);
+                            console.error("Status Text:", xhr.statusText);
+                            console.error("Erro:", error);
+                            console.error("Resposta completa:", xhr.responseText);
+
+                            let mensagemErro = "Erro ao consultar o CNPJ.";
+
+                            if (xhr.status === 404) {
+                                mensagemErro = "Rota não encontrada (404). Verifique o Controller e as rotas.";
+                            } else if (xhr.status === 500) {
+                                mensagemErro = "Erro no servidor (500). Verifique os logs do CakePHP.";
+                            } else if (xhr.status === 0) {
+                                mensagemErro = "Não foi possível conectar. Verifique a URL e CORS.";
+                            }
+
+                            alert(mensagemErro + "\n\nDetalhes no console (F12)");
+                            $("#nome").val("");
+                        }
+                    });
+                } else if (cnpj.length > 0) {
+                    alert("CNPJ deve ter 14 dígitos!");
+                }
+            });
+        });
+    </script>
+    <script>
+// Script para envio do formulário via AJAX
+$(document).ready(function () {
+    // Prevenir envio padrão do formulário e enviar via AJAX
+    $("#add-supplier-modal form").on("submit", function (e) {
+        e.preventDefault(); // Impede o comportamento padrão
+        
+        let form = $(this);
+        let formData = form.serialize(); // Serializa os dados do formulário
+        let submitBtn = form.find('button[type="submit"]');
+        
+        // Desabilita o botão durante o envio
+        submitBtn.prop('disabled', true).html(
+            '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Salvando...'
+        );
+        
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                console.log("✅ Fornecedor salvo com sucesso!", response);
+                
+                // Fecha o modal
+                $('#add-supplier-modal').modal('hide');
+                
+                // Limpa o formulário
+                form[0].reset();
+                
+                // Mostra mensagem de sucesso
+                alert('Fornecedor cadastrado com sucesso!');
+                
+                // Recarrega a página para mostrar o novo fornecedor
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error("❌ Erro ao salvar fornecedor");
+                console.error("Status HTTP:", xhr.status);
+                console.error("Status Text:", xhr.statusText);
+                console.error("Erro:", error);
+                console.error("Resposta completa:", xhr.responseText);
+                
+                // Tenta parsear a resposta JSON
+                let errorMsg = 'Erro ao salvar fornecedor. Verifique os dados e tente novamente.';
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMsg = response.message;
+                    }
+                    if (response.errors) {
+                        console.error("Erros de validação:", response.errors);
+                        errorMsg += "\n\nErros: " + JSON.stringify(response.errors, null, 2);
+                    }
+                } catch (e) {
+                    // Se não for JSON, mostra o texto da resposta
+                    if (xhr.responseText) {
+                        console.error("Resposta (não-JSON):", xhr.responseText);
+                    }
+                }
+                
+                alert(errorMsg);
+                
+                // Reabilita o botão
+                submitBtn.prop('disabled', false).html(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> Adicionar Fornecedor'
+                );
+            }
+        });
+    });
+    
+    // Limpa o formulário quando o modal é fechado
+    $('#add-supplier-modal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset();
+        $(this).find('button[type="submit"]').prop('disabled', false).html(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg> Adicionar Fornecedor'
+        );
+    });
+});
+</script>
+
 </body>
 
 </html>
