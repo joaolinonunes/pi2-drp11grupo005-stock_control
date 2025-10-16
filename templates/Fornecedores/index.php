@@ -113,8 +113,8 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Nome</label>
-                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do fornecedor">
+                                    <label class="form-label">Razão Social</label>
+                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do Fornecedor">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -127,14 +127,14 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">cep</label>
-                                    <input type="text" class="form-control" name="cep" id="cep" placeholder="Nome do fornecedor">
+                                    <label class="form-label">CEP</label>
+                                    <input type="text" class="form-control" name="cep" id="cep" placeholder="CEP">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Logradouro</label>
-                                    <input type="text" class="form-control" name="logradouro" id="logradouro" placeholder="CNPJ">
+                                    <input type="text" class="form-control" name="logradouro" id="logradouro" placeholder="Endereço">
                                 </div>
                             </div>
                         </div>
