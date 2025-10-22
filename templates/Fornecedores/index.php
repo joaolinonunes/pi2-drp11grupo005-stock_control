@@ -139,8 +139,8 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Nome</label>
-                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do fornecedor">
+                                    <label class="form-label">Razão Social</label>
+                                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do Fornecedor">
                                 </div>
                             </div>
                             <div class="col-lg-6">
