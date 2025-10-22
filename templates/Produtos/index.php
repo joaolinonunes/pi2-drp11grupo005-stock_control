@@ -87,26 +87,60 @@
                                 <td><span class="text-muted"><?= $produto->data_cadastro ? $produto->data_cadastro->format('d/m/Y, H:i') : 'sem data' ?></span></td>
                                 <td><span class="text-muted"><?= $produto->validade ? $produto->validade->format('d/m/Y') : '-' ?></span></td>
                                 <td class="table-actions">
-                                    <?= $this->Html->link(
-                                    '<i class="bi bi-pencil"></i>',
-                                        ['action' => 'edit', $produto->id_produto],
-                                        ['escape' => false, 'class' => 'btn btn-icon btn-outline-primary', 'title' => 'Editar produto']
-                                    ) ?>
-                                    <?= $this->Html->link(
-                                    '<i class="bi bi-info-circle"></i>',
-                                        ['action' => 'view', $produto->id_produto],
-                                        ['escape' => false, 'class' => 'btn btn-icon btn-outline-info ms-1', 'title' => 'Ver detalhes']
-                                    ) ?>
-                                    <?= $this->Form->postLink(
-                                    '<i class="bi bi-trash"></i>',
-                                        ['action' => 'delete', $produto->id_produto],
-                                                [
+                                    <!-- Botões para telas maiores -->
+                                    <div class="d-none d-xl-inline-flex">
+                                        <?= $this->Html->link(
+                                            '<i class="bi bi-info-circle"></i>',
+                                            ['action' => 'view', $produto->id_produto],
+                                            ['escape' => false, 'class' => 'btn btn-icon btn-outline-info', 'title' => 'Ver detalhes']
+                                        ) ?>
+                                        <?= $this->Html->link(
+                                            '<i class="bi bi-pencil"></i>',
+                                            ['action' => 'edit', $produto->id_produto],
+                                            ['escape' => false, 'class' => 'btn btn-icon btn-outline-primary ms-1', 'title' => 'Editar produto']
+                                        ) ?>
+                                        <?= $this->Form->postLink(
+                                            '<i class="bi bi-trash"></i>',
+                                            ['action' => 'delete', $produto->id_produto],
+                                            [
                                                 'escape' => false,
                                                 'class' => 'btn btn-icon btn-outline-danger ms-1',
                                                 'confirm' => 'Tem certeza que deseja excluir este produto?',
                                                 'title' => 'Excluir produto'
                                             ]
-                                    ) ?>
+                                        ) ?>
+                                    </div>
+                                            
+                                    <!-- Dropdown para telas menores -->
+                                    <div class="dropdown d-xl-none">
+                                        <button class="btn btn-icon btn-outline-secondary" type="button" id="dropdownMenu<?= $produto->id_produto ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu<?= $produto->id_produto ?>">
+                                            <li>
+                                                <?= $this->Html->link(
+                                                    '<i class="bi bi-info-circle me-2"></i>Ver detalhes', 
+                                                    ['action' => 'view', $produto->id_produto], 
+                                                    ['class' => 'dropdown-item', 'escape' => false]
+                                                ) ?>
+                                            </li>
+                                            <li>
+                                                <?= $this->Html->link(
+                                                    '<i class="bi bi-pencil me-2"></i>Editar', 
+                                                    ['action' => 'edit', $produto->id_produto], 
+                                                    ['class' => 'dropdown-item', 'escape' => false]
+                                                ) ?>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <?= $this->Form->postLink(
+                                                    '<i class="bi bi-trash me-2"></i>Excluir', 
+                                                    ['action' => 'delete', $produto->id_produto], 
+                                                    ['confirm' => 'Tem certeza que deseja excluir este produto?', 'class' => 'dropdown-item text-danger', 'escape' => false]
+                                                ) ?>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

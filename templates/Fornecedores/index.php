@@ -56,6 +56,8 @@
                                 <td><?= h($fornecedor->categoria) ?></td>
                                 <td><span class="text-muted"><?= $fornecedor->data_cadastro ? h($fornecedor->data_cadastro->format('d \d\e F \d\e Y, H:i')) : 'Não informado' ?>
                                 <td class="table-actions">
+                                    <!-- Botões para telas maiores -->
+                                    <div class="d-none d-lg-inline-flex">
                                         <?= $this->Html->link(
                                             '<i class="bi bi-pencil"></i>', 
                                             ['action' => 'edit', $fornecedor->id_fornecedor], 
@@ -66,6 +68,30 @@
                                             ['action' => 'delete', $fornecedor->id_fornecedor], 
                                             ['confirm' => 'Tem certeza que deseja excluir?', 'class' => 'btn btn-icon btn-outline-danger ms-1', 'escape' => false, 'data-bs-toggle' => 'tooltip', 'title' => 'Excluir fornecedor']
                                         ) ?>
+                                    </div>
+                                        
+                                    <!-- Dropdown para telas menores -->
+                                    <div class="dropdown d-lg-none">
+                                        <button class="btn btn-icon btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <?= $this->Html->link(
+                                                    '<i class="bi bi-pencil me-2"></i>Editar', 
+                                                    ['action' => 'edit', $fornecedor->id_fornecedor], 
+                                                    ['class' => 'dropdown-item', 'escape' => false]
+                                                ) ?>
+                                            </li>
+                                            <li>
+                                                <?= $this->Form->postLink(
+                                                    '<i class="bi bi-trash me-2"></i>Excluir', 
+                                                    ['action' => 'delete', $fornecedor->id_fornecedor], 
+                                                    ['confirm' => 'Tem certeza que deseja excluir?', 'class' => 'dropdown-item text-danger', 'escape' => false]
+                                                ) ?>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -101,7 +127,7 @@
 
 <!-- Modal de adicionar fornecedor -->
     <div class="modal modal-blur fade" id="add-supplier-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <!-- Formulário de adição de fornecedor -->
                 <form action="<?= $this->Url->build(['controller' => 'Fornecedores', 'action' => 'add']) ?>" method="post">
@@ -125,16 +151,58 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Fantasia</label>
+                                    <input type="text" class="form-control" name="nome_fan" id="nome_fan" placeholder="Nome fantasia">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Descrição</label>
+                                    <input type="text" class="form-control" name="descricao" id="descricao" placeholder="Descrição do fornecedor">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Cep</label>
+                                    <input type="text" class="form-control" name="cep" id="cep" placeholder="Cep">
+                                </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">cep</label>
-                                    <input type="text" class="form-control" name="cep" id="cep" placeholder="Nome do fornecedor">
+                                    <label class="form-label">Municipio</label>
+                                    <input type="text" class="form-control" name="municipio" id="municipio" placeholder="Municipio">
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    <label class="form-label">UF</label>
+                                    <input type="text" class="form-control" name="uf" id="uf" placeholder="UF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Bairro</label>
+                                    <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Bairro">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Logradouro</label>
-                                    <input type="text" class="form-control" name="logradouro" id="logradouro" placeholder="CNPJ">
+                                    <input type="text" class="form-control" name="logradouro" id="logradouro" placeholder="Logradouro">
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Numero</label>
+                                    <input type="text" class="form-control" name="numero" id="numero" placeholder="Numero">
                                 </div>
                             </div>
                         </div>
@@ -149,14 +217,14 @@
                                 <div class="mb-3">
                                     <label class="form-label">Categoria</label>
                                     <select class="form-select" name="categoria">
+                                        <option value="Outros">Outros</option>
                                         <option value="Carnes">Carnes</option>
                                         <option value="Massas">Massas</option>
                                         <option value="Bebidas">Bebidas</option>
                                         <option value="Temperos">Temperos</option>
                                         <option value="Cereais">Cereais</option>
                                         <option value="Verduras e Legumes">Verduras e Legumes</option>
-                                        <option value="Frutas">Frutas</option>
-                                        <option value="Outros">Outros</option>
+                                        <option value="Frutas">Frutas</option>                                       
                                     </select>
                                 </div>
                             </div>
@@ -179,6 +247,9 @@
 
     <!-- Tabler Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.1.1/dist/js/tabler.min.js"></script>
+
+    <!-- Bootstrap Bundle (inclui Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -230,6 +301,10 @@
                                 // Preenche os campos com os dados retornados
                                 $("#nome").val(data.razao_social || "");
 
+                                $("#nome_fan").val(data.nome_fantasia || "");
+
+                                $("#descricao").val(data.cnae_fiscal_descricao || "");
+
                                 // Formata telefone (se existir)
                                 let telefone = data.ddd_telefone_1 || "";
                                 if (telefone) {
@@ -249,7 +324,15 @@
                                 }
                                 $("#cep").val(cep);
 
+                                $("#bairro").val(data.bairro || "");
+
+                                $("#numero").val(data.numero || "");
+
                                 $("#logradouro").val(data.logradouro || "");
+
+                                $("#municipio").val(data.municipio || "");
+
+                                $("#uf").val(data.uf || "");
 
                                 console.log("✅ Campos preenchidos com sucesso!");
                             } else {
